@@ -8,3 +8,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>,
 )
+/*
+ for dir in src/componentns; do
+  find "$dir" -type f -name "*.js" -exec bash -c 'mv "$0" "${0%.js}.jsx"' {} \;
+  done
+*/

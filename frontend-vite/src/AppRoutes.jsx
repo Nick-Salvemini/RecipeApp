@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import LoginForm from './components/Auth/LoginForm';
 import RegisterForm from './components/Auth/RegisterForm';
 import RecipeList from './components/Recipes/RecipeList';
@@ -10,16 +10,17 @@ import Navbar from './components/Common/Navbar';
 import Footer from './components/Common/Footer';
 
 const AppRoutes = () => {
+    console.log('Rendering routes in AppRoutes');
     return (
         <>
             <Navbar />
             <Routes>
                 <Route path="/login" element={<LoginForm />} />
                 <Route path="/register" element={<RegisterForm />} />
-                <Route path="/" element={<PrivateRoute component={RecipeForm} />} />
-                <Route path="/recipes" element={<PrivateRoute component={RecipeList} />} />
-                <Route path="/recipe/:id" element={<PrivateRoute component={RecipeDetails} />} />
-                <Route path="/new-recipe" element={<PrivateRoute component={RecipeForm} />} />
+                <Route path="/" element={<PrivateRoute><RecipeForm /></PrivateRoute>} />
+                <Route path="/recipes" element={<PrivateRoute><RecipeList /></PrivateRoute>} />
+                <Route path="/recipe/:id" element={<PrivateRoute><RecipeDetails /></PrivateRoute>} />
+                <Route path="/new-recipe" element={<PrivateRoute><RecipeForm /></PrivateRoute>} />
             </Routes>
             <Footer />
         </>
