@@ -38,12 +38,12 @@ function authReducer(state, action) {
 // AuthProvider component
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
-    const history = useNavigate();
+    //const history = useNavigate();
 
     useEffect(() => {
         const path = state.isAuthenticated ? '/home' : '/login';
-        history(path);
-    }, [state.isAuthenticated, history]);
+        // history(path);
+    }, [state.isAuthenticated]);
 
     return (
         <AuthContext.Provider value={{ state, dispatch }}>
