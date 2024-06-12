@@ -18,7 +18,7 @@ const LoginForm = () => {
         try {
             const { user, token } = await authService.login(credentials);
             dispatch({ type: 'LOGIN', payload: { user, token } });
-            history('/home')
+            history('/')
         } catch (error) {
             console.error('Login failed:', error);
             alert('Login failed');
