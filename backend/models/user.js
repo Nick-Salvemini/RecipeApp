@@ -9,8 +9,6 @@ const {
   UnauthorizedError,
 } = require("../expressError");
 
-console.log('line 12 user', db)
-console.log('line 13 user', db.query)
 
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
 

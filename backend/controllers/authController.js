@@ -8,14 +8,10 @@ const { UnauthorizedError } = require("../expressError");
 async function register(req, res, next) {
     try {
         const { username, password, email } = req.body;
-        console.log("line 11", req.body)
         const user = await User.register({ username, password, email });
-        console.log("line 13", user)
         const token = jwt.sign({ username: user.username }, SECRET_KEY);
-        console.log("line 15", token)
         return res.status(201).json({ user, token });
     } catch (err) {
-        console.log("line 18", err)
         return next(err);
     }
 }

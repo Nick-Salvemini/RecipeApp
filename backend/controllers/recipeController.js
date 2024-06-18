@@ -1,4 +1,5 @@
 const Recipe = require("../models/recipe");
+const { generateRecipe } = require("../services/chatGptService")
 const { NotFoundError } = require("../expressError");
 
 /** Functions for recipe management. */
@@ -6,8 +7,11 @@ const { NotFoundError } = require("../expressError");
 async function addRecipe(req, res, next) {
     try {
         const { user_id, name, difficulty, prep_cook_time, cuisine_type, ingredients, steps } = req.body;
-        const recipe = await Recipe.create({ user_id, name, difficulty, prep_cook_time, cuisine_type, ingredients, steps });
-        return res.status(201).json({ recipe });
+        // const recipe = await Recipe.create({ user_id, name, difficulty, prep_cook_time, cuisine_type, ingredients, steps });
+
+        const generatedRecipe = await generateRecipe(difficulty, prep_cook_time, cuisine_type, ingredients)
+
+        return res.status(201).json({ generatedRecipe });
     } catch (err) {
         return next(err)
     }

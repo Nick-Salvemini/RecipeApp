@@ -9,6 +9,14 @@ const recipeService = {
             throw error;
         }
     },
+    saveRecipe: async (recipeData) => {
+        try {
+            const response = await http.post('/recipes/save', recipeData);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
     fetchRecipes: async () => {
         try {
             const response = await http.get('/recipes');
