@@ -7,8 +7,8 @@ const RecipeForm = ({ recipeId }) => {
     const { state } = useAuth();
     const [formData, setFormData] = useState({
         difficulty: '',
-        prepCookTime: '',
-        cuisineType: '',
+        prep_cook_time: '',
+        cuisine_type: '',
         ingredients: ['']
     });
 
@@ -54,7 +54,9 @@ const RecipeForm = ({ recipeId }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            console.log('User state in handleSubmit:', state.user);
             const payload = { ...formData, user_id: state.user.id, ingredients: formData.ingredients.join(', ') };
+            console.log('Submit payload:', payload);
             const recipe = await recipeService.createRecipe(payload);
             setGeneratedRecipe(recipe.generatedRecipe);
         } catch (error) {
@@ -64,7 +66,9 @@ const RecipeForm = ({ recipeId }) => {
 
     const handleSaveRecipe = async () => {
         try {
+            console.log('User state in handleSaveRecipe:', state.user);
             const payload = { ...formData, user_id: state.user.id, ingredients: formData.ingredients.join(', '), steps: generatedRecipe };
+            console.log('Save payload:', payload);
             await recipeService.saveRecipe(payload);
             history('/recipes')
         } catch (err) {
@@ -87,8 +91,8 @@ const RecipeForm = ({ recipeId }) => {
         //     </select>
 
         //     <select
-        //         name="prepCookTime"
-        //         value={formData.prepCookTime}
+        //         name="prep_cook_time"
+        //         value={formData.prep_cook_time}
         //         onChange={handleChange}
         //         required
         //     >
@@ -102,8 +106,8 @@ const RecipeForm = ({ recipeId }) => {
 
         //     <input
         //         type="text"
-        //         name="cuisineType"
-        //         value={formData.cuisineType}
+        //         name="cuisine_type"
+        //         value={formData.cuisine_type}
         //         onChange={handleChange}
         //         placeholder="Cuisine Type"
         //         required
@@ -152,8 +156,8 @@ const RecipeForm = ({ recipeId }) => {
                     </select>
 
                     <select
-                        name="prepCookTime"
-                        value={formData.prepCookTime}
+                        name="prep_cook_time"
+                        value={formData.prep_cook_time}
                         onChange={handleChange}
                         required
                     >
@@ -167,8 +171,8 @@ const RecipeForm = ({ recipeId }) => {
 
                     <input
                         type="text"
-                        name="cuisineType"
-                        value={formData.cuisineType}
+                        name="cuisine_type"
+                        value={formData.cuisine_type}
                         onChange={handleChange}
                         placeholder="Cuisine Type"
                         required

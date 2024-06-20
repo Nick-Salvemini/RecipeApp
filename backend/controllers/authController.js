@@ -9,7 +9,7 @@ async function register(req, res, next) {
     try {
         const { username, password, email } = req.body;
         const user = await User.register({ username, password, email });
-        const token = jwt.sign({ username: user.username }, SECRET_KEY);
+        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY);
         return res.status(201).json({ user, token });
     } catch (err) {
         return next(err);
@@ -20,7 +20,7 @@ async function login(req, res, next) {
     try {
         const { username, password } = req.body;
         const user = await User.authenticate(username, password);
-        const token = jwt.sign({ username: user.username }, SECRET_KEY);
+        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY);
         return res.json({ user, token });
     } catch (err) {
         return next(err);

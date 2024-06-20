@@ -17,6 +17,7 @@ const LoginForm = () => {
 
         try {
             const { user, token } = await authService.login(credentials);
+            console.log('Logged in user:', user);
             dispatch({ type: 'LOGIN', payload: { user, token } });
             history('/')
         } catch (error) {

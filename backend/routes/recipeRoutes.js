@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { addRecipe, getRecipe, deleteRecipe, listUserRecipes } = require('../controllers/recipeController');
+const { addRecipe, getRecipe, deleteRecipe, listUserRecipes, saveRecipe } = require('../controllers/recipeController');
 const { authenticateJWT, ensureLoggedIn, ensureCorrectUser } = require('../middleware/auth');
 
 // Route to add a new recipe
 router.post('/', authenticateJWT, ensureLoggedIn, addRecipe);
+
+// Route to save a recipe
+router.post('/save', authenticateJWT, ensureLoggedIn, saveRecipe);
 
 // Route to get a specific recipe by id
 router.get('/:id', authenticateJWT, ensureLoggedIn, getRecipe);

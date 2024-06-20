@@ -15,6 +15,7 @@ const initialState = {
 function authReducer(state, action) {
     switch (action.type) {
         case 'LOGIN':
+            console.log('User logged in:', action.payload.user);
             localStorage.setItem('authToken', action.payload.token);
             return {
                 ...state,

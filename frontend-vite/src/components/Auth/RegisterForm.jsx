@@ -17,6 +17,7 @@ const RegisterForm = () => {
 
         try {
             const { user, token } = await authService.register(userData);
+            console.log('Registered user:', user);
             dispatch({ type: 'LOGIN', payload: { user, token } });
             history('/')
         } catch (error) {
