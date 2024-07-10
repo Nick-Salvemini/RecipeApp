@@ -15,14 +15,23 @@
 // initDatabase();
 
 const { execSync } = require('child_process');
-const { getDatabaseUri } = require('../config');
 const path = require('path');
 
 function initDatabase() {
     try {
         console.log("Starting Database Initialization...");
-        const sqlFilePath = path.resolve(__dirname, 'flavor-craft.sql');
-        execSync(`psql ${getDatabaseUri()} -f ${sqlFilePath}`);
+
+        execSync(`psql -c "DROP DATABASE IF EXISTS flavor_craft;"`);
+        execSync(`psql -c "CREATE DATABASE flavor_craft;"`);
+        execSync(`psql -c "DROP DATABASE IF EXISTS flavor_craft_test;"`);
+        execSync(`psql -c "CREATE DATABASE flavor_craft_test;"`);
+
+        const schemaFilePath = path.resolve(__dirname, 'flavor-craft-schema.sql');
+        const seedFilePath = path.resolve(__dirname, 'flavor-craft-seed.js');
+
+        execSync(`psql -f ${schemaFilePath}`);
+        execSync(`node ${seedFilePath}`);
+
         console.log("Database initialized successfully");
     } catch (error) {
         console.error("Failed to initialize database:", error);

@@ -14,6 +14,7 @@ const Layout = () => (
     <>
         <Navbar />
         <Outlet />
+
         <Footer />
         <GlobalErrorHandler />
     </>
@@ -25,7 +26,7 @@ const routes = createRoutesFromElements(
         <Route path="register" element={<RegisterForm />} />
         <Route path="/" element={<PrivateRoute><RecipeForm /></PrivateRoute>} />
         <Route path="recipes" element={<PrivateRoute><RecipeList /></PrivateRoute>} />
-        <Route path="recipe/:id" element={<PrivateRoute><RecipeDetails /></PrivateRoute>} />
+        <Route path="recipes/:id" element={<PrivateRoute><RecipeDetails /></PrivateRoute>} />
         <Route path="new-recipe" element={<PrivateRoute><RecipeForm /></PrivateRoute>} />
     </Route>
 );

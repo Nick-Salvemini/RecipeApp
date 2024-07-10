@@ -14,64 +14,82 @@ const API_URL = 'https://api.openai.com/v1/chat/completions'
  */
 
 async function generateRecipe(difficulty, prep_cook_time, cuisine_type, ingredients) {
-    return `Name: Fake Recipe Name, Difficulty: ${difficulty}, Prep/Cook Time: ${prep_cook_time}, Cuisine Type: ${cuisine_type}, Ingredients: ${ingredients}`
+    // For testing while avoiding calls to ChatGPT 
 
-
-    // const headers = {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${OPENAI_API_KEY}`
-    // };
-
-    // const prompt = `
-    //                 Generate a recipe with the following details:
-    //                 Difficulty: ${difficulty}
-    //                 Prep/Cook Time: ${prep_cook_time}
-    //                 Cuisine Type: ${cuisine_type}
-    //                 Ingredients: ${ingredients}
-    //                 Provide a recipe name, list of ingredients, and a detailed step-by-step cooking process.
-    //             `;
-
-
-    // const data = {
-    //     "model": "gpt-3.5-turbo-0125",
-    //     "messages": [
-    //         {
-    //             "role": "system",
-    //             "content": "You are a helpful assistant."
-    //         },
-    //         {
-    //             "role": "user",
-    //             "content": prompt
-    //         }
-    //     ],
-    //     "temperature": .6,
-    //     "max_tokens": 256
-    // };
-
-    // let retryCount = 0;
-    // let maxRetries = 5;
-
-    // while (retryCount < maxRetries) {
-    //     try {
-    //         const response = await axios.post(API_URL, data, { headers });
-
-    //         console.log(response)
-    //         return response.data.choices[0].message.content.trim();
-    //     } catch (error) {
-    //         if (error.response && error.response.status === 429) {
-    //             const retryAfter = error.response.headers['retry-after'] || (2 ** retryCount * 1000);
-    //             console.log(error.response.data)
-    //             console.log(`Rate limit exceeded. Retrying in ${retryAfter / 1000} seconds...`);
-    //             await new Promise(resolve => setTimeout(resolve, retryAfter));
-    //             retryCount++;
-    //         } else {
-    //             console.error('Failed to generate recipe:', error.response.data);
-    //             throw new Error('Failed to communicate with the recipe generation service.');
-    //         }
-    //     }
+    // let generatedRecipeObj = {
+    //     'Name': 'Fake Recipe Name',
+    //     'Difficulty': difficulty,
+    //     'Prep/Cook Time': prep_cook_time,
+    //     'Cuisine Type': cuisine_type,
+    //     'Ingredients': [ingredients, 'Salt', 'Pepper', 'Olive Oil'],
+    //     'Steps': ['Take out the chicken', 'Season the chicken', 'Cook the chicken', 'Serve the chicken']
     // }
 
-    // throw new Error('Exceeded maximum retry attempts.');
+    // console.log(generatedRecipeObj)
+
+    // return generatedRecipeObj
+
+    // -------------------------------------
+
+    const prompt = `
+                    Create an ${cuisine_type} recipe using ${ingredients}.
+
+                        {
+                          "Name": "Recipe Name", 
+                          "Difficulty": "${difficulty}", 
+                          "Prep/Cook Time": "${prep_cook_time}", 
+                          "Cuisine Type": "${cuisine_type}", 
+                          "Ingredients": ["Ingredient 1 with quantity", "Ingredient 2 with quantity", "Ingredient 3 with quantity"], 
+                          "Steps": ["Step 1", "Step 2", "Step 3", "Step 4"]
+                        } Do Not Number Steps
+                `;
+
+    const data = {
+        "model": "gpt-3.5-turbo-0125",
+        "messages": [
+            {
+                "role": "system",
+                "content": "You are a helpful assistant."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        "temperature": .6,
+        "max_tokens": 400
+    };
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+    };
+
+    let retryCount = 0;
+    let maxRetries = 5;
+
+    while (retryCount < maxRetries) {
+        try {
+            const response = await axios.post(API_URL, data, { headers });
+
+            const message = response.data.choices[0].message.content.trim()
+            console.log(message)
+            return message
+        } catch (error) {
+            if (error.response && error.response.status === 429) {
+                const retryAfter = error.response.headers['retry-after'] || (2 ** retryCount * 1000);
+                // console.log(error.response.data)
+                console.log(`Rate limit exceeded. Retrying in ${retryAfter / 1000} seconds...`);
+                await new Promise(resolve => setTimeout(resolve, retryAfter));
+                retryCount++;
+            } else {
+                console.error('Failed to generate recipe:', error.response.data);
+                throw new Error('Failed to communicate with the recipe generation service.');
+            }
+        }
+    }
+
+    throw new Error('Exceeded maximum retry attempts.');
 }
 
 module.exports = { generateRecipe }

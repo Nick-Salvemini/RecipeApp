@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS recipes;
+DROP TABLE IF EXISTS users;
+
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   username VARCHAR(25) NOT NULL UNIQUE,
@@ -12,7 +15,7 @@ CREATE TABLE recipes (
   difficulty VARCHAR(20) NOT NULL,
   prep_cook_time VARCHAR(50) NOT NULL,
   cuisine_type VARCHAR(50) NOT NULL,
-  ingredients TEXT,
-  steps TEXT,
+  ingredients TEXT[] NOT NULL,
+  steps TEXT[] NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-);
+); 

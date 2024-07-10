@@ -15,7 +15,10 @@ router.get('/:id', authenticateJWT, ensureLoggedIn, getRecipe);
 // Route to delete a specific recipe
 router.delete('/:id', authenticateJWT, ensureLoggedIn, ensureCorrectUser, deleteRecipe);
 
-// Route to list all recipes for a user
-router.get('/user/:user_id', authenticateJWT, ensureLoggedIn, ensureCorrectUser, listUserRecipes);
+// // Route to list all recipes for a user
+// router.get('/user/:user_id', authenticateJWT, ensureLoggedIn, ensureCorrectUser, listUserRecipes);
+
+// Route to list all recipes for authenticated user**
+router.get('/', authenticateJWT, ensureLoggedIn, listUserRecipes);
 
 module.exports = router;

@@ -57,7 +57,7 @@ class Recipe {
             [id]
         );
 
-        const recipe = results.rows[0];
+        const recipe = result.rows[0];
         if (!recipe) throw new NotFoundError(`No recipe found with id: ${id}`);
 
         return recipe

@@ -25,6 +25,14 @@ const recipeService = {
             throw error;
         }
     },
+    fetchRecipeById: async (id) => {
+        try {
+            const response = await http.get(`/recipes/${id}`);
+            return response.data.recipe;
+        } catch (error) {
+            throw error;
+        }
+    },
     deleteRecipe: async (id) => {
         try {
             await http.delete(`/recipes/${id}`);

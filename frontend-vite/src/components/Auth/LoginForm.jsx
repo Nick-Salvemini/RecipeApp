@@ -27,16 +27,40 @@ const LoginForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                Username:
-                <input type="text" name="username" value={credentials.username} onChange={handleChange} required />
-            </label>
-            <label>
-                Password:
-                <input type="password" name="password" value={credentials.password} onChange={handleChange} required />
-            </label>
-            <button type="submit">Login</button>
+        <form onSubmit={handleSubmit} className="w-100 mx-auto mt-5">
+            <div className="mb-3 row">
+                <label htmlFor="username" className="col-sm-3 col-form-label">Username:</label>
+                <div className="col-sm-9">
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={credentials.username}
+                        onChange={handleChange}
+                        className="form-control"
+                        required
+                    />
+                </div>
+            </div>
+            <div className="mb-3 row">
+                <label htmlFor="password" className="col-sm-3 col-form-label">Password:</label>
+                <div className="col-sm-9">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={credentials.password}
+                        onChange={handleChange}
+                        className="form-control"
+                        required
+                    />
+                </div>
+            </div>
+            <div className="mb-3 row">
+                <div className="col-sm-12 text-center">
+                    <button type="submit" className="btn btn-primary">Login</button>
+                </div>
+            </div>
         </form>
     );
 };
