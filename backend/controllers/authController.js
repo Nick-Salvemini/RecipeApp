@@ -2,43 +2,60 @@ const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require("../config");
 const User = require("../models/user");
 const { UnauthorizedError } = require("../expressError");
+const { createToken } = require('../helpers/tokens');
 
-/** Functions for user authentication handling. */
+/** Register user: { user } => { token }
+ *
+ * user must include { email, password }
+ *
+ * Returns JWT token which can be used to authenticate further requests.
+ *
+ */
 
 async function register(req, res, next) {
     try {
-        const { username, password, email } = req.body;
-        const user = await User.register({ username, password, email });
-        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY);
-        return res.status(201).json({ user, token });
+        const newUser = await User.register({ ...req.body });
+        const token = createToken(newUser);
+        return res.status(201).json({ token });
     } catch (err) {
         return next(err);
     }
 }
+
+/** Login: { email, password } => { token }
+ *
+ * Returns JWT token which can be used to authenticate further requests.
+ *
+ */
 
 async function login(req, res, next) {
     try {
-        const { username, password } = req.body;
-        const user = await User.authenticate(username, password);
-        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY);
-        return res.json({ user, token });
+        const { email, password } = req.body;
+        const user = await User.authenticate(email, password);
+        const token = createToken(user);
+        return res.json({ token, user });
     } catch (err) {
         return next(err);
     }
 }
 
+/** Delete user: { email }
+ *
+ * Returns success message.
+ *
+ */
+
 async function deleteUser(req, res, next) {
     try {
-        const username = req.params.username;
-        await User.remove(username);
-        res.status(204).send();
-    } catch (error) {
-        return next(error);
+        await User.remove(req.params.email);
+        return res.json({ message: "User deleted" });
+    } catch (err) {
+        return next(err);
     }
 }
 
 module.exports = {
     register,
     login,
-    deleteUser
-}
+    deleteUser,
+};

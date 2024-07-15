@@ -12,6 +12,7 @@ const RecipeForm = ({ recipeId }) => {
         cuisine_type: '',
         ingredients: ['']
     });
+    const [errors, setErrors] = useState({});
     const [generatedRecipe, setGeneratedRecipe] = useState(null);
     const [loading, setLoading] = useState(false);
     const history = useNavigate();
@@ -43,52 +44,71 @@ const RecipeForm = ({ recipeId }) => {
     const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
 
-        // Check for empty ingredient inputs
+        const newErrors = { ingredients: [] };
+
         if (formData.ingredients.some(ingredient => ingredient.trim() === '')) {
-            alert('Please fill out all ingredient fields.');
+            formData.ingredients.forEach((ingredient, index) => {
+                if (ingredient.trim() === '') {
+                    newErrors.ingredients[index] = 'Please provide 1-5 ingredients.';
+                }
+            });
+        }
+
+        if (!formData.cuisine_type.trim()) {
+            newErrors.cuisine_type = 'Please provide a cuisine type.';
+        }
+
+        if (!formData.prep_cook_time.trim()) {
+            newErrors.prep_cook_time = 'Please provide a prep/cook time.';
+        }
+
+        if (!formData.difficulty.trim()) {
+            newErrors.difficulty = 'Please select a difficulty level.';
+        }
+
+        if (Object.keys(newErrors).some(key => newErrors[key].length > 0)) {
+            setErrors(newErrors);
             return;
         }
 
         setLoading(true);
 
         try {
-            console.log('User state in handleSubmit:', state.user);
-            const payload = { ...formData, user_id: state.user.id, ingredients: formData.ingredients.join(', ') };
-            console.log('Submit payload:', payload);
-            const recipe = await recipeService.createRecipe(payload);
-            console.log('Generatred recipe:', recipe.generatedRecipe)
-            try {
-
+            if (state.user && state.user.id) {
+                const payload = { ...formData, user_id: state.user.id, ingredients: formData.ingredients.join(', ') };
+                const recipe = await recipeService.createRecipe(payload);
                 setGeneratedRecipe(JSON.parse(recipe.generatedRecipe));
-            } catch (e) {
-                console.log('parsing generated recipe json failed', e)
+            } else {
+                throw new Error("User not authenticated");
             }
         } catch (error) {
             console.error('Failed to submit recipe', error);
         } finally {
             setLoading(false);
         }
-    }, [formData])
+    }, [formData, state.user])
 
     const handleSaveRecipe = useCallback(async () => {
         try {
-            console.log('User state in handleSaveRecipe:', state.user);
-            const payload = {
-                user_id: state.user.id,
-                name: generatedRecipe.Name,
-                difficulty: generatedRecipe.Difficulty,
-                prep_cook_time: generatedRecipe["Prep/Cook Time"],
-                cuisine_type: generatedRecipe["Cuisine Type"],
-                ingredients: generatedRecipe.Ingredients.join(', '),
-                steps: generatedRecipe.Steps.join('. ')
-            };
-            console.log('Save payload:', payload);
-            await recipeService.saveRecipe(payload);
-            history('/recipes')
+            if (state.user && state.user.id) {
+                const payload = {
+                    user_id: state.user.id,
+                    name: generatedRecipe.Name,
+                    difficulty: generatedRecipe.Difficulty,
+                    prep_cook_time: generatedRecipe["Prep/Cook Time"],
+                    cuisine_type: generatedRecipe["Cuisine Type"],
+                    ingredients: generatedRecipe.Ingredients.join(', '),
+                    steps: generatedRecipe.Steps.join('. ')
+                };
+                await recipeService.saveRecipe(payload);
+                history('/recipes')
+            } else {
+                throw new Error("User not authenticated");
+            }
         } catch (err) {
             console.error('Failed to save recipe', err);
         }
-    }, [generatedRecipe, state])
+    }, [generatedRecipe, state.user, history])
 
     const handleNewRecipe = () => {
         setGeneratedRecipe(null);
@@ -104,10 +124,9 @@ const RecipeForm = ({ recipeId }) => {
         <div className="container mt-5">
             {loading ? (
                 <div className="text-center">
-                    <iframe src="https://giphy.com/embed/6rmxsMnN0kSryPsI9p" width="240" height="240" frameBorder="0" className="giphy-embed" allowFullScreen></iframe>
-                    <p>Cooking...</p>
-                </div>
-
+                <img src={PanGif} alt="Cooking..." width="240" height="240" />
+                <p>Cooking...</p>
+            </div>
             ) : generatedRecipe ? (
                 <div>
                     <RecipeDetails recipe={generatedRecipe} />
@@ -115,7 +134,7 @@ const RecipeForm = ({ recipeId }) => {
                     <button className="btn btn-secondary mt-3 ms-2" onClick={handleNewRecipe}>New Recipe</button>
                 </div>
             ) : (
-                <form onSubmit={handleSubmit} className="w-100 mx-auto mt-5">
+                <form onSubmit={handleSubmit} className="w-100 mx-auto mt-5 needs-validation" noValidate>
                     <div className="mb-3 row">
                         <label htmlFor="difficulty" className="col-sm-3 col-form-label">Difficulty:</label>
                         <div className="col-sm-9">
@@ -124,7 +143,7 @@ const RecipeForm = ({ recipeId }) => {
                                 name="difficulty"
                                 value={formData.difficulty}
                                 onChange={handleChange}
-                                className="form-control"
+                                className={`form-control ${errors.difficulty ? 'is-invalid' : ''}`}
                                 required
                             >
                                 <option value="">--Select Difficulty--</option>
@@ -132,6 +151,11 @@ const RecipeForm = ({ recipeId }) => {
                                 <option value="average">Average</option>
                                 <option value="difficult">Difficult</option>
                             </select>
+                            {errors.difficulty && (
+                                <div className="invalid-feedback">
+                                    {errors.difficulty}
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="mb-3 row">
@@ -142,7 +166,7 @@ const RecipeForm = ({ recipeId }) => {
                                 name="prep_cook_time"
                                 value={formData.prep_cook_time}
                                 onChange={handleChange}
-                                className="form-control"
+                                className={`form-control ${errors.prep_cook_time ? 'is-invalid' : ''}`}
                                 required
                             >
                                 <option value="">--Select Prep/Cook Time--</option>
@@ -152,6 +176,11 @@ const RecipeForm = ({ recipeId }) => {
                                 <option value="1-2 hours">1-2 hours</option>
                                 <option value="2+ hours">2+ hours</option>
                             </select>
+                            {errors.prep_cook_time && (
+                                <div className="invalid-feedback">
+                                    {errors.prep_cook_time}
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="mb-3 row">
@@ -163,36 +192,48 @@ const RecipeForm = ({ recipeId }) => {
                                 name="cuisine_type"
                                 value={formData.cuisine_type}
                                 onChange={handleChange}
-                                className="form-control"
+                                className={`form-control ${errors.cuisine_type ? 'is-invalid' : ''}`}
                                 placeholder="Cuisine Type"
                                 required
                             />
+                            {errors.cuisine_type && (
+                                <div className="invalid-feedback">
+                                    {errors.cuisine_type}
+                                </div>
+                            )}
                         </div>
                     </div>
                     {formData.ingredients.map((ingredient, index) => (
                         <div key={index} className="mb-3 row">
                             <label htmlFor={`ingredient_${index}`} className="col-sm-3 col-form-label">Ingredient {index + 1}:</label>
-                            <div className="col-sm-7">
-                                <input
-                                    type="text"
-                                    id={`ingredient_${index}`}
-                                    name={`ingredient_${index}`}
-                                    value={ingredient}
-                                    onChange={handleChange}
-                                    className="form-control"
-                                    placeholder={`Ingredient ${index + 1}`}
-                                    required={index === 0}
-                                />
-                            </div>
-                            <div className="col-sm-2">
-                                {index > 0 && (
-                                    <button
-                                        type="button"
-                                        className="btn btn-danger"
-                                        onClick={() => handleRemoveIngredient(index)}
-                                    >
-                                        Delete
-                                    </button>
+                            <div className="col-sm-9">
+                                <div className="input-group">
+                                    <input
+                                        type="text"
+                                        id={`ingredient_${index}`}
+                                        name={`ingredient_${index}`}
+                                        value={ingredient}
+                                        onChange={handleChange}
+                                        className={`form-control ${errors.ingredients ? 'is-invalid' : ''}`}
+                                        placeholder={`Ingredient ${index + 1}`}
+                                        required={index === 0}
+                                    />
+                                    <div className="input-group-append">
+                                        {index > 0 && (
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-danger"
+                                                onClick={() => handleRemoveIngredient(index)}
+                                            >
+                                                <i className="bi bi-x"></i>
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                                {errors.ingredients && errors.ingredients[index] && (
+                                    <div className="invalid-feedback">
+                                        Please provide 1-5 ingredients.
+                                    </div>
                                 )}
                             </div>
                         </div>

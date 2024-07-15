@@ -5,7 +5,6 @@ import recipeService from '../../services/recipeService';
 const RecipeDetails = ({ recipe: propRecipe }) => {
     const { id } = useParams();
     const [recipe, setRecipe] = useState(propRecipe)
-    console.log(recipe)
     const [loading, setLoading] = useState(!recipe);
     const [error, setError] = useState('');
 
@@ -24,18 +23,17 @@ const RecipeDetails = ({ recipe: propRecipe }) => {
     }, [id, propRecipe])
 
     useEffect(() => {
-        console.log('Recipe received in RecipeDetails:', recipe);
     }, [recipe]);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
 
     const getIngredients = (recipe) => {
-        return recipe.Ingredients || recipe.ingredients.split(',') || [];
+        return Array.isArray(recipe.ingredients) ? recipe.ingredients : [];
     };
 
     const getSteps = (recipe) => {
-        return recipe.Steps || recipe.steps.split(',') || [];
+        return Array.isArray(recipe.steps) ? recipe.steps : [];
     };
 
     return (

@@ -4,11 +4,12 @@ const { SECRET_KEY } = require("../config");
 /** return signed JWT from user data. */
 
 function createToken(user) {
-  console.assert(user.username !== undefined,
-    "createToken passed user without username property");
+  console.assert(user.email !== undefined,
+    "createToken passed user without email property");
 
   let payload = {
-    username: user.username
+    email: user.email,
+    user_id: user.id
   };
 
   const options = { expiresIn: '24h' };

@@ -4,7 +4,7 @@ const authService = {
     login: async (credentials) => {
         try {
             const response = await http.post('/auth/login', credentials);
-            return response.data;  // this should include token and user details
+            return { token: response.data.token, user: response.data.user };  // Return token and user
         } catch (error) {
             throw error;
         }

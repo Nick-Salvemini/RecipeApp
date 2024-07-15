@@ -10,6 +10,6 @@ router.post('/register', register);
 router.post('/login', login);
 
 // Route to delete a user
-router.delete('/delete/:username', authenticateJWT, ensureLoggedIn, ensureCorrectUser, deleteUser)
+router.delete('/delete/:email', authenticateJWT, ensureLoggedIn, ensureCorrectUser, deleteUser)
 
 module.exports = router;

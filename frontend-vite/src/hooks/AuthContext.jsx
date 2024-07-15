@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // Define the context
 const AuthContext = createContext();
@@ -15,7 +16,6 @@ const initialState = {
 function authReducer(state, action) {
     switch (action.type) {
         case 'LOGIN':
-            console.log('User logged in:', action.payload.user);
             localStorage.setItem('authToken', action.payload.token);
             return {
                 ...state,
@@ -31,19 +31,15 @@ function authReducer(state, action) {
                 user: null,
                 token: null
             };
-        default:
-            return state;
     }
 }
 
 // AuthProvider component
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
-    //const history = useNavigate();
 
     useEffect(() => {
         const path = state.isAuthenticated ? '/home' : '/login';
-        // history(path);
     }, [state.isAuthenticated]);
 
     return (

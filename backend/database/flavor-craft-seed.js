@@ -9,12 +9,10 @@ async function seedDatabase() {
     const saltRounds = 10;
     const users = [
         {
-            username: 'testuser1',
             password: 'password1',
             email: 'testemail1@gmail.com',
         },
         {
-            username: 'testuser2',
             password: 'password2',
             email: 'testemail2@gmail.com',
         },
@@ -26,11 +24,11 @@ async function seedDatabase() {
     }
 
     const usersSql = `
-        INSERT INTO users (username, password, email)
+        INSERT INTO users (password, email)
         VALUES
-        ('${users[0].username}', '${users[0].password}', '${users[0].email}'),
-        ('${users[1].username}', '${users[1].password}', '${users[1].email}')
-        ON CONFLICT (username) DO NOTHING;
+        ('${users[0].password}', '${users[0].email}'),
+        ('${users[1].password}', '${users[1].email}')
+        ON CONFLICT (email) DO NOTHING;
     `;
 
     const recipesSql = `

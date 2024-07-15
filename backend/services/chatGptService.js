@@ -25,7 +25,6 @@ async function generateRecipe(difficulty, prep_cook_time, cuisine_type, ingredie
     //     'Steps': ['Take out the chicken', 'Season the chicken', 'Cook the chicken', 'Serve the chicken']
     // }
 
-    // console.log(generatedRecipeObj)
 
     // return generatedRecipeObj
 
@@ -73,12 +72,10 @@ async function generateRecipe(difficulty, prep_cook_time, cuisine_type, ingredie
             const response = await axios.post(API_URL, data, { headers });
 
             const message = response.data.choices[0].message.content.trim()
-            console.log(message)
             return message
         } catch (error) {
             if (error.response && error.response.status === 429) {
                 const retryAfter = error.response.headers['retry-after'] || (2 ** retryCount * 1000);
-                // console.log(error.response.data)
                 console.log(`Rate limit exceeded. Retrying in ${retryAfter / 1000} seconds...`);
                 await new Promise(resolve => setTimeout(resolve, retryAfter));
                 retryCount++;

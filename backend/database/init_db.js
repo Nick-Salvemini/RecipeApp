@@ -1,19 +1,3 @@
-// const { execSync } = require('child_process');
-// const { getDatabaseUri } = require('../config');
-
-// function initDatabase() {
-//     try {
-//         console.log("Starting Database Initialization...");
-//         execSync(`psql ${getDatabaseUri()} -f database/flavor-craft.sql`);
-//         console.log("Database initialized successfully");
-//     } catch (error) {
-//         console.error("Failed to initialize database:", error);
-//         process.exit(1);
-//     }
-// }
-
-// initDatabase();
-
 const { execSync } = require('child_process');
 const path = require('path');
 
@@ -29,7 +13,7 @@ function initDatabase() {
         const schemaFilePath = path.resolve(__dirname, 'flavor-craft-schema.sql');
         const seedFilePath = path.resolve(__dirname, 'flavor-craft-seed.js');
 
-        execSync(`psql -f ${schemaFilePath}`);
+        execSync(`psql -d flavor_craft -f ${schemaFilePath}`);
         execSync(`node ${seedFilePath}`);
 
         console.log("Database initialized successfully");
