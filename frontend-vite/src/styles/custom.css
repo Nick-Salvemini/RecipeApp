@@ -1,0 +1,60 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap');
+
+
+/* Logo Color Chart
+--brown: #4D3A24;
+--orange: #FFA24B;
+--light-blue: #7CD5C9;
+--green: #7DBE37;
+--dark-green: #3A7435;
+--dark-blue: #1D2023;
+--cream: #F2D9B0;  */
+
+
+/* Global Styles */
+body {
+    background-color: #F2D9B0;
+    color: #1D2023;
+    font-family: 'Berkshire Swash', 'Brush Script MT', cursive, sans-serif;
+}
+
+/* Additional Custom Styles */
+.custom-container {
+    padding: 20px;
+    background-color: #4D3A24;
+    color: #F2D9B0;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background-color: #7DBE37;
+    border-color: #3A7435;
+}
+
+.btn-primary:hover {
+    background-color: #3A7435;
+    border-color: #4D3A24;
+}
+
+.btn-secondary {
+    background-color: #7CD5C9;
+    border-color: #5b9c92;
+}
+
+.btn-secondary:hover {
+    background-color: #5b9c92;
+    border-color: #1D2023;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ol {
+    list-style-position: inside;
+    padding-left: 0;
+    margin-left: 0;
+}

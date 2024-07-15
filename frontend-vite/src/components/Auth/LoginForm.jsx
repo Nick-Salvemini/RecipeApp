@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../hooks/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import authService from '../../services/authService';
-import './Form.css';
+import '../../styles/form.css';
 
 const LoginForm = () => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });

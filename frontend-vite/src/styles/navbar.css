@@ -1,0 +1,33 @@
+.custom-navbar {
+    background-color: #1D2023;
+    /* Dark Blue */
+    color: #F2D9B0;
+    /* Cream */
+}
+
+.custom-navbar .navbar-brand,
+.custom-navbar .nav-link {
+    color: #F2D9B0;
+    /* Cream */
+    font-family: 'Berkshire Swash', 'Brush Script MT', cursive, sans-serif;
+}
+
+.custom-navbar .navbar-brand:hover,
+.custom-navbar .nav-link:hover {
+    color: #FFA24B;
+    /* Orange */
+}
+
+.custom-navbar .btn.nav-link {
+    background: none;
+    border: none;
+    color: #F2D9B0;
+    /* Cream */
+    cursor: pointer;
+    font-family: 'Berkshire Swash', 'Brush Script MT', cursive, sans-serif;
+}
+
+.custom-navbar .btn.nav-link:hover {
+    color: #FFA24B;
+    /* Orange */
+}

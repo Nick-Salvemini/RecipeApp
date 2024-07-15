@@ -70,9 +70,11 @@ async function generateRecipe(difficulty, prep_cook_time, cuisine_type, ingredie
     while (retryCount < maxRetries) {
         try {
             const response = await axios.post(API_URL, data, { headers });
-
             const message = response.data.choices[0].message.content.trim()
-            return message
+
+            console.log(message)
+
+            return JSON.parse(message)
         } catch (error) {
             if (error.response && error.response.status === 429) {
                 const retryAfter = error.response.headers['retry-after'] || (2 ** retryCount * 1000);

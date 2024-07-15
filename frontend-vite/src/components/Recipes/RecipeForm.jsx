@@ -1,8 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import recipeService from '../../services/recipeService';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import RecipeDetails from './RecipeDetails';
+import '../../styles/form.css';
+import PanGif from '../../assets/images/PanGif.gif';
 
 const RecipeForm = ({ recipeId }) => {
     const { state } = useAuth();
@@ -77,7 +79,8 @@ const RecipeForm = ({ recipeId }) => {
             if (state.user && state.user.id) {
                 const payload = { ...formData, user_id: state.user.id, ingredients: formData.ingredients.join(', ') };
                 const recipe = await recipeService.createRecipe(payload);
-                setGeneratedRecipe(JSON.parse(recipe.generatedRecipe));
+                console.log("Generated Recipe:", recipe);
+                setGeneratedRecipe(recipe);
             } else {
                 throw new Error("User not authenticated");
             }
@@ -87,6 +90,10 @@ const RecipeForm = ({ recipeId }) => {
             setLoading(false);
         }
     }, [formData, state.user])
+
+    useEffect(() => {
+        console.log("Generated Recipe Updated:", generatedRecipe);
+    }, [generatedRecipe]);
 
     const handleSaveRecipe = useCallback(async () => {
         try {
@@ -124,9 +131,9 @@ const RecipeForm = ({ recipeId }) => {
         <div className="container mt-5">
             {loading ? (
                 <div className="text-center">
-                <img src={PanGif} alt="Cooking..." width="240" height="240" />
-                <p>Cooking...</p>
-            </div>
+                    <img src={PanGif} alt="Cooking..." width="240" height="240" />
+                    <p>Cooking...</p>
+                </div>
             ) : generatedRecipe ? (
                 <div>
                     <RecipeDetails recipe={generatedRecipe} />
