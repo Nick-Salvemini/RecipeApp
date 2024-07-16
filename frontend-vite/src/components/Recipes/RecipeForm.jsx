@@ -239,7 +239,7 @@ const RecipeForm = ({ recipeId }) => {
                                 </div>
                                 {errors.ingredients && errors.ingredients[index] && (
                                     <div className="invalid-feedback">
-                                        Please provide 1-5 ingredients.
+                                        {errors.ingredients[index]}
                                     </div>
                                 )}
                             </div>
