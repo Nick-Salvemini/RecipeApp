@@ -8,6 +8,8 @@ const RecipeDetails = ({ recipe: propRecipe }) => {
     const [loading, setLoading] = useState(!recipe);
     const [error, setError] = useState('');
 
+    console.log("Details", recipe)
+
     useEffect(() => {
         if (!propRecipe && id) {
             recipeService.fetchRecipeById(id)
@@ -29,11 +31,13 @@ const RecipeDetails = ({ recipe: propRecipe }) => {
     if (error) return <p>{error}</p>;
 
     const getIngredients = (recipe) => {
-        return Array.isArray(recipe.ingredients) ? recipe.ingredients : [];
+        const ingredient = recipe.ingredients || recipe.Ingredients
+        return Array.isArray(ingredient) ? ingredient : [];
     };
 
     const getSteps = (recipe) => {
-        return Array.isArray(recipe.steps) ? recipe.steps : [];
+        const steps = recipe.steps || recipe.Steps
+        return Array.isArray(steps) ? steps : [];
     };
 
     return (

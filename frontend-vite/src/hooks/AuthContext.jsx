@@ -9,13 +9,15 @@ const AuthContext = createContext();
 const initialState = {
     isAuthenticated: false,
     user: null,
-    token: localStorage.getItem('authToken')
+    // token: localStorage.getItem('authToken')
+    token: localStorage.getItem('authToken') || null
 };
 
 // Reducer function to handle actions
 function authReducer(state, action) {
     switch (action.type) {
         case 'LOGIN':
+            console.log('User logged in:', action.payload.user);
             localStorage.setItem('authToken', action.payload.token);
             return {
                 ...state,
@@ -38,9 +40,22 @@ function authReducer(state, action) {
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
 
+    // useEffect(() => {
+    //     const path = state.isAuthenticated ? '/home' : '/login';
+    // }, [state.isAuthenticated]);
+
     useEffect(() => {
-        const path = state.isAuthenticated ? '/home' : '/login';
-    }, [state.isAuthenticated]);
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            axios.get('/auth/me', {
+                headers: { Authorization: `Bearer ${token}` }
+            }).then(response => {
+                dispatch({ type: 'LOGIN', payload: { user: response.data.user, token } });
+            }).catch(() => {
+                dispatch({ type: 'LOGOUT' });
+            });
+        }
+    }, []);
 
     return (
         <AuthContext.Provider value={{ state, dispatch }}>

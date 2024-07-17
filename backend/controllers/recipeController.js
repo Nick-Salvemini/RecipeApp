@@ -10,7 +10,7 @@ async function addRecipe(req, res, next) {
 
         const generatedRecipe = await generateRecipe(difficulty, prep_cook_time, cuisine_type, ingredients)
 
-        return res.status(201).json({ generatedRecipe });
+        return res.status(201).json({ ...generatedRecipe });
     } catch (err) {
         return next(err)
     }

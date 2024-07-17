@@ -72,8 +72,6 @@ async function generateRecipe(difficulty, prep_cook_time, cuisine_type, ingredie
             const response = await axios.post(API_URL, data, { headers });
             const message = response.data.choices[0].message.content.trim()
 
-            console.log(message)
-
             return JSON.parse(message)
         } catch (error) {
             if (error.response && error.response.status === 429) {

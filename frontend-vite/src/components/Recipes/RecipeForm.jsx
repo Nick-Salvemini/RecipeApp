@@ -92,7 +92,7 @@ const RecipeForm = ({ recipeId }) => {
     }, [formData, state.user])
 
     useEffect(() => {
-        console.log("Generated Recipe Updated:", generatedRecipe);
+        // console.log("Generated Recipe Updated:", generatedRecipe);
     }, [generatedRecipe]);
 
     const handleSaveRecipe = useCallback(async () => {
@@ -104,9 +104,10 @@ const RecipeForm = ({ recipeId }) => {
                     difficulty: generatedRecipe.Difficulty,
                     prep_cook_time: generatedRecipe["Prep/Cook Time"],
                     cuisine_type: generatedRecipe["Cuisine Type"],
-                    ingredients: generatedRecipe.Ingredients.join(', '),
-                    steps: generatedRecipe.Steps.join('. ')
+                    ingredients: generatedRecipe.Ingredients,
+                    steps: generatedRecipe.Steps
                 };
+                console.log(payload)
                 await recipeService.saveRecipe(payload);
                 history('/recipes')
             } else {
