@@ -25,7 +25,7 @@ const LoginForm = () => {
         try {
             const { user, token } = await authService.login(credentials);
 
-            localStorage.setItem('authToken', token);
+            // localStorage.setItem('authToken', token);
 
             dispatch({ type: 'LOGIN', payload: { user, token } });
             history('/');

@@ -40,20 +40,10 @@ function authReducer(state, action) {
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
 
-    // useEffect(() => {
-    //     const path = state.isAuthenticated ? '/home' : '/login';
-    // }, [state.isAuthenticated]);
-
     useEffect(() => {
         const token = localStorage.getItem('authToken');
         if (token) {
-            axios.get('/auth/me', {
-                headers: { Authorization: `Bearer ${token}` }
-            }).then(response => {
-                dispatch({ type: 'LOGIN', payload: { user: response.data.user, token } });
-            }).catch(() => {
-                dispatch({ type: 'LOGOUT' });
-            });
+            dispatch({ type: 'LOGIN', payload: { user: {}, token } });
         }
     }, []);
 
