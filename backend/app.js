@@ -48,9 +48,9 @@ app.use((err, req, res, next) => {
 // Connect to the database and start the server
 db.connect().then(() => {
     console.log("Database connected successfully");
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
+    // app.listen(PORT, () => {
+    //     console.log(`Server running on port ${PORT}`);
+    // });
 }).catch(err => {
     console.error("Database connection failed", err.stack);
 });
