@@ -12,7 +12,21 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend-vite/dist', 'index.html'));
 });
 
-// Start the server
-app.listen(PORT, () => {
+// // Start the server
+// app.listen(PORT, () => {
+//     console.log(`Server running on port ${PORT}`);
+// });
+
+// Start the server and handle errors
+const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+});
+
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use`);
+        process.exit(1); // Exit the process with failure
+    } else {
+        throw err;
+    }
 });
