@@ -1,11 +1,8 @@
-require('dotenv').config({ path: 'key.env' });
+// require('dotenv').config({ path: 'key.env' });
 const express = require('express');
+const path = require('path');
 const app = require('./app');
-const port = process.env.PORT || 3000;
-
-// app.listen(port, () => {
-//     console.log(`Server is running on http://localhost:${port}`);
-// });
+const PORT = process.env.PORT || 3000;
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../frontend-vite/dist')));
@@ -16,6 +13,6 @@ app.get('*', (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
