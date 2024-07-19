@@ -12,11 +12,6 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend-vite/dist', 'index.html'));
 });
 
-// // Start the server
-// app.listen(PORT, () => {
-//     console.log(`Server running on port ${PORT}`);
-// });
-
 // Start the server and handle errors
 const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
