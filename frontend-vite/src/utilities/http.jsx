@@ -12,7 +12,7 @@ const http = axios.create({
 http.interceptors.request.use(function (config) {
     const token = localStorage.getItem('authToken');
 
-    console.log("Configured API Base URL:", config.baseURL);
+    console.log("Configured API Base URL(http):", config.baseURL);
 
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
