@@ -1,6 +1,6 @@
 # FlavorCraft Recipe Generator
 
-[FlavorCraft Recipe Generator](https://your-deployed-url.com)
+[FlavorCraft Recipe Generator]([https://your-deployed-url.com](https://recipeapp-ji9x.onrender.com))
 
 ## Description
 FlavorCraft is a dynamic and user-friendly website that allows users to generate and save recipes based on specific ingredients, cuisine types, and cooking preferences. Using the power of the OpenAI API, the site crafts personalized recipes to inspire users in the kitchen.
